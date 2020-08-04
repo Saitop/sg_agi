@@ -55,14 +55,14 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         node(
             choose_station,
             inputs=['raw_temp', 'params:station_id'],
-            outputs='temperature',
+            outputs='station_temperature',
         ),
     ])
 
     ds = Pipeline([
         node(
             lambda x: x.plot(x='time', figsize=(20, 12)).figure,
-            inputs='temperature',
+            inputs='station_temperature',
             outputs='temp_plot'
         ),
     ])
