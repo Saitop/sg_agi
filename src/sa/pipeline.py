@@ -51,7 +51,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         node(
             get_temp_data,
             inputs=None,
-            output='raw_temp',
+            outputs='raw_temp',
         ),
         node(
             choose_station,
@@ -59,7 +59,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
             outputs='temperature',
         ),
         node(
-            lambda x: x.plot(x='time', figsize=(20, 12)),
+            lambda x: x.plot(x='time', figsize=(20, 12)).figure,
             inputs='temperature',
             outputs='temp_plot'
         )
