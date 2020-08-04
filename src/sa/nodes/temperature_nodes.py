@@ -23,7 +23,7 @@ def choose_station(temp_data: Dict, station_id: str):
         })
     return pd.DataFrame(output)
 
- 
+
 def avg_temp_by_hour(df):
     df['hour'] = df['time'].apply(lambda x: x[:13])
     return df.groupby(['hour']).mean().plot(figsize=(20, 12)).figure
