@@ -46,8 +46,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         A mapping from a pipeline name to a ``Pipeline`` object.
 
     """
-
-    return {"__default__": Pipeline([
+    de = Pipeline([
         node(
             get_temp_data,
             inputs=None,
@@ -58,9 +57,17 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
             inputs=['raw_temp', 'params:station_id'],
             outputs='temperature',
         ),
+    ])
+
+    ds = Pipeline([
         node(
             lambda x: x.plot(x='time', figsize=(20, 12)).figure,
             inputs='temperature',
             outputs='temp_plot'
-        )
-    ])}
+        ),
+    ])
+    return {
+        'de': de,
+        'ds': ds,
+        "__default__": de + ds
+    }
