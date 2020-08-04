@@ -31,7 +31,10 @@
 
 from typing import Dict
 
-from kedro.pipeline import Pipeline
+from kedro.pipeline import Pipeline, node
+
+from sa.nodes.temperature_nodes import choose_station
+
 
 def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     """Create the project's pipeline.
@@ -44,4 +47,15 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
 
     """
 
-    return {"__default__": Pipeline([])}
+    return {"__default__": Pipeline([
+        node(
+            choose_station,
+            inputs=['raw_temp', 'params:station_id'],
+            outputs='temperature',
+        ),
+        node(
+            lambda x: x.plot(x='time', figsize=(20, 12)),
+            inputs='temperature',
+            outputs=None
+        )
+    ])}
