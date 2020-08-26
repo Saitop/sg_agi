@@ -22,3 +22,12 @@ downloaded_station_data:
   path: data/01_raw/downloaded_station_data
   dataset: pandas.CSVDataSet
   filename_suffix: .csv
+
+
+already_downloaded_dates:
+  type: json.JSONDataSet
+  filepath: data/01_raw/already_downloaded_dates.json
+
+already_downloaded_dates!:
+  type: json.JSONDataSet
+  filepath: data/01_raw/already_downloaded_dates.json
