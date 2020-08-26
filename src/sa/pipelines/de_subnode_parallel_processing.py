@@ -8,7 +8,7 @@ from sa.nodes.temperature_nodes import get_temp_data, choose_station
 from multiprocessing.dummy import Pool
 
 
-def generate_data_range(
+def generate_date_range(
         start_date: str,
         end_date: str,
 ):
@@ -21,15 +21,16 @@ def generate_data_range(
 
 def parallel_get_temp_data(
         dates_to_download: Dict[str, bool],
-        already_downloaded_dates: Dict[str, bool]
+        already_downloaded_dates: Dict[str, bool],
 ) -> Tuple[Dict[str, Dict], Dict[str, bool]]:
+
     logger = logging.getLogger('parallel_get_temp_data')
 
     def _get_temp_data(dt):
         if already_downloaded_dates.get(dt, False):
-            logger.info(f"Skip Download {dt}")
+            logger.info(f"Skip   Download {dt}")
             return
-        logger.info(f"Start Download {dt}")
+        logger.info(f"Start  Download {dt}")
         try:
             date_data = get_temp_data(dt)
         except KeyboardInterrupt:
@@ -56,7 +57,7 @@ def parallel_choose_station(
         downloaded_data_dict: Dict,
         station_id: str,
 ):
-    logger = logging.getLogger('parallel_get_temp_data')
+    logger = logging.getLogger('parallel_choose_station')
 
     def _choose_station(item):
         dt = item[0]
@@ -75,18 +76,18 @@ def parallel_choose_station(
 def create_pipeline():
     return Pipeline([
         node(
-            generate_data_range,
+            generate_date_range,
             inputs=['params:start_date', 'params:end_date'],
             outputs='dates_to_download'
         ),
         node(
             parallel_get_temp_data,
             inputs=['dates_to_download', 'already_downloaded_dates'],
-            outputs=['downloaded_dates', 'already_downloaded_dates!']
+            outputs=['downloaded_dates', 'already_downloaded_dates!'],
         ),
         node(
             parallel_choose_station,
             inputs=['downloaded_dates', 'params:station_id'],
-            outputs='downloaded_station_data'
+            outputs='downloaded_station_data',
         )
     ])
