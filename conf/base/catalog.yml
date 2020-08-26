@@ -15,3 +15,10 @@ raw_temp:
 station_temperature:
   type: pandas.CSVDataSet
   filepath: data/01_raw/station_temperature.csv
+
+
+downloaded_station_data:
+  type: PartitionedDataSet
+  path: data/01_raw/downloaded_station_data
+  dataset: pandas.CSVDataSet
+  filename_suffix: .csv

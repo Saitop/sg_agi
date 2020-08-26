@@ -34,6 +34,7 @@ from typing import Dict
 from kedro.pipeline import Pipeline, node
 
 from sa.nodes.temperature_nodes import choose_station, get_temp_data, avg_temp_by_hour
+from sa.pipelines import de_subnode_parallel_processing
 
 
 def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
@@ -66,8 +67,12 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
             outputs='temp_plot'
         ),
     ])
+
+    de_subnode = de_subnode_parallel_processing.create_pipeline()
+
     return {
+        'de_subnode': de_subnode,
         'de': de,
         'ds': ds,
-        "__default__": de + ds
+        "__default__": de_subnode + ds
     }
