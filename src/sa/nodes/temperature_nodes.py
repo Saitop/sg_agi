@@ -13,13 +13,14 @@ def choose_station(temp_data: Dict, station_id: str):
     output = []
     for item in temp_data['items']:
         ts = item['timestamp']
+        temperature = None
         try:
             temperature = [temp['value'] for temp in item['readings'] if temp['station_id'] == station_id][0]
         except IndexError:
             pass
         output.append({
             'time': ts,
-            'temp': temperature
+            'temp': temperature,
         })
     return pd.DataFrame(output)
 
